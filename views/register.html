@@ -37,11 +37,13 @@
                 data:data,
                 success:function (data, status) {
                     if (status == 'success'){
-                        location.href = 'login';
+                        location.href = 'register';
+                        console.log("success");
                     }
                 },
                 error:function (data, err) {
                     location.href = 'register';
+                    console.log(err);
                 }
             });
         }
@@ -51,7 +53,7 @@
     <div class="container" style="margin-top: 100px; width: 980px;">
         <%- message %>
         <div class="row">
-            <div class="col-lg-6 col-lg-offset-3">
+            <div class="col-lg-10" style="padding-left:150px;"style="padding-left:150px;">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="height: 50px;">
                         <div class="panel-title" style="text-align: center">Register</div>
