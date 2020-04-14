@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+    <style type="text/css">
+        .panel-title{
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .spys{
+            list-style-type: none;
+        }
+
+        .spys li{
+            float: left;
+            margin: 10px 10px;
+            width: 180px;
+            height: 230px;
+        }
+        .spys li div strong{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div style="margin: 50px auto; width: 900px;">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="height: 40px;">
+                <div style="text-align: left">
+                    <span style="font-size: 20px; font-weight: bold;">Commodity exhibition</span>
+                    <div style="float: right">
+                        <a class="btn btn-xs btn-success" href="addCommodity" style="margin-right: 35px;">Add Commodity</a>
+                        <a class="btn btn-xs btn-success" href="cart" style="margin-right: 35px;">Cart</a>
+                        <a class="btn btn-xs btn-info" href="logout" style="margin-right: 35px;">Log Out</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <ul class="spys">
+                    <%
+                        for(var i in Commodities){
+                            if(!Commodities[i].name) continue;
+                    %>
+                    <li class="spys li">
+                        <div>
+                            <img width="120" height="100" src="images/<%= Commodities[i].imgSrc%>">
+                        </div>
+
+                        <div>
+                            <a><%=Commodities[i].name%></a>
+                            <strong>$ <%=Commodities[i].price%></strong>
+                        </div>
+
+                        <div>
+                            <a class="btn btn-success" style="width: 120px;" href="/addToCart/<%=Commodities[i]._id%>">Add To Cart</a>
+                        </div>
+                    </li>
+                    <%}%>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

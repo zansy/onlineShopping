@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Commodity</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        function addCommodity() {
+            var name = $('#cname').val(), price  =$('#cprice').val();
+            var data = { "name": name, price:price,"imgSrc": "xmsz-"+Math.floor(Math.random()*5+1)+".jpg"};
+            $.ajax({
+                url:'/addCommodity',
+                type:'POST',
+                data:data,
+                success:function (data,status) {
+                    if (status == 'success'){
+                        alert('Added Successfully!')
+                    }
+                },
+                error:function (data, err) {
+                    alert('Failed to add.')
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div style="margin: 100px auto; width: 500px;" class="add_c">
+        <h1>Add Commodity</h1>
+        <a class="btn btn-xs btn-success" href="home" style="margin-left: 400px;">Return to Home</a>
+        <form action="#" role="form" method="post">
+            <input style="margin-top: 30px;" id="cname" type="text" class="form-control" name="cname" placeholder="Commodity name">
+            <input style="margin-top: 30px;" id="cprice" type="text" class="form-control" name="cprice" placeholder="Commodity price">
+            <input style="margin-top: 30px;" type="button" class="btn btn-success btn-block" onclick="addCommodity()" value="Add Commodity">
+        </form>
+    </div>
+</body>
+</html>

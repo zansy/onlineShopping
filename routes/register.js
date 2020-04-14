@@ -25,7 +25,7 @@ module.exports = function (app) {
                         res.send(500);
                         console.log(error);
                     }else {
-                        req.session.error = 'Username created successfully.';
+                        req.session.success = 'Username created successfully.';
                         res.send(200);
                     }
                 });

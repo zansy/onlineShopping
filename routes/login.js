@@ -18,6 +18,7 @@ module.exports = function (app) {
                     req.session.error = "Wrong password.";
                     res.send(404);
                 }else {
+                    req.session.success = "Hello.";
                     req.session.user = doc;
                     res.send(200);
                 }
