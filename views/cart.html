@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            //commodity +-
+            $('.li-quantity a').click(function () {
+                var self = $(this);
+                var type = self.attr('data-type'),
+                    num = parseFloat(self.siblings('input').val());
+                if (type == 'add'){
+                    num += 1;
+                }else if (type == 'subtr'){
+                    if (num > 1){
+                        num -= 1;
+                    }else{
+                        return false;
+                    }
+                }
+                self.siblings('input').val(num);
+                tamount();
+            });
+
+            //The checkbox radio
+            //???
+            $('input[name = "chkItem"]:checkbox').click(function () {
+                var isCheck = $('input[name="checkItem"]:not(:checked)').length ? false:true;
+                $('#CheckAll').prop("checked", isCheck);
+                tamount();
+            });
+
+            //The checkbox selection
+            //???
+            $('#CheckAll').click(function () {
+                var self = $(this);
+                $('input[name="chkItem"]').each(function () {
+                    $(this).prop("checked", self.is(':checked'));
+                });
+                tamount();
+            })
+        });
+
+        var sum = 0;
+        //checkout
+        function CheckOut() {
+            $('input[name="chkItem"]:checked').each(function () {
+                var self = $(this),
+                    index = self.attr('data-index'),
+                    cid = self.attr('data-id');
+                var quantity = $('#Q'+index).val();
+                var data = {"cid":cid, "cnum":quantity};
+                $.ajax({
+                    url:'/cart/checkout',
+                    type:'post',
+                    data:data,
+                    success:function (data, status) {
+
+                    },
+                    error:function (data, status) {
+
+                    }
+                });
+            });
+            alert('$'+sum);
+            location.href = "cart";
+        }
+
+        //Calculate the total price of goods
+        function tamount() {
+            sum = 0;
+            $('input[name="chkItem"]:checked').each(function () {
+                var self = $(this),
+                    price = self.attr('data-price'),
+                    index = self.attr('data-index');
+                var quantity = $('#Q'+index).val();
+                sum += (parseFloat(price)*parseFloat(quantity));
+            });
+            $("#money").html('$'+sum+'.00');
+        }
+
+    </script>
+
+    <style type="text/css">
+        .cart-heading{
+            height: 40px;
+            background-color: #EFEDED;
+        }
+        .cart-body{
+            background-color: #F7F7F7;
+        }
+        .cart-body ul li div{
+            float: left;
+            height: 80px;
+        }
+        .li-checkbox input{
+            margin: 20px 5px 0 0;
+        }
+        .li-img a img{
+            width: 40px;
+            height: 50px;
+        }
+        .li-content{
+            margin: 20px 0 0 30px;
+            width: 280px;
+        }
+        .li-price{
+            margin: 20px 0 0 60px;
+            width: 100px;
+        }
+        .li-quantity{
+            margin: 20px 0 0 130px;
+            width: 100px;
+        }
+        .li-del{
+            margin: 20px 0 0 30px;
+            width: 50px;
+        }
+        .li-img{
+            margin: 0 0 0 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div style="margin: 50px auto; width: 900px;">
+        <div>
+            <div>
+                <div style="float: right">
+                    <a class="btn btn-xs btn-success" href="home.html" style="margin-right: 35px;">Home</a>
+                    <a class="btn btn-xs btn-info" href="logout">Log out</a>
+                </div>
+                <h2>Cart</h2>
+                <hr>
+            </div>
+
+            <div>
+                <div class="cart-heading">
+                    <div style="padding: 10px 0 0 10px">
+                        <span style="margin-right: 200px;">
+                            <input id="checkAll" type="checkbox"> Check All
+                        </span>
+                        <span style="margin-right: 180px">Commodity</span>
+                        <span style="margin-right: 210px">Price</span>
+                        <span style="margin-right: 80px">Quantity</span>
+                        <span style="padding-right: 0px">Operation</span>
+                    </div>
+                </div>
+
+                <div class="cart-body">
+                    <ul>
+                        <%
+                            for(var i in carts){
+                                if(!carts[i].cId) continue;
+                        %>
+                        <li>
+                            <div class="li-checkbox">
+                                <input data-id="<%= cart[i]._id %>" data-index="<%=i%>" data-price="<%= cart[i].cPrice %>"
+                                 name="chkItem" class="li-checkbox input" type="checkbox">
+                            </div>
+                            <div class="li-img">
+                                <a>
+                                    <img class="li-img a img" src="images/<%= cart[i].cImgSrc %>">
+                                </a>
+                            </div>
+                            <div class="li-content">
+                                <a><%= carts[i].cName %></a>
+                            </div>
+                            <div class="li-price">
+                                <span><%= carts[i].cPrice %></span>
+                            </div>
+                            <div class="li-quantity">
+                                <a data-type="add" href="javascript:void(0);" class="btn btn-default btn-xs">+</a>
+                                <input id="Q<%=i%>" style="width: 40px;" type="text" value="<%= cart[i].cQuantity %>">
+                                <a data-type="subtr" href="javascript:void(0);" class="btn btn-default btn-xs">-</a>
+                            </div>
+                            <div class="li-del">
+                                <a href="/delFormCart/<%= carts[i]._id %>" class="btn btn-primary btn-xs">Delete</a>
+                            </div>
+                        </li>
+                        <%}%>
+                    </ul>
+                </div>
+
+                <div style="float: right; height: 35px; width: 330px;">
+                    Summary: <span id="money" style="color: red; font-size: 25px">$0.00</span>
+                    <input type="button" style="width: 130px; float: right;" class="btn btn-success"
+                           onclick="CheckOut();" value="Check Out">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
